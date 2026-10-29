@@ -4,7 +4,7 @@ import { ArrowRight, Flame, ShieldCheck, Truck, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/store/ProductCard";
 import { categoriesQuery, productsQuery } from "@/lib/queries";
-import hero from "/images/hero.jpg?url";
+const hero = "/images/hero.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
