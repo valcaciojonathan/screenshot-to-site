@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
@@ -17,11 +18,22 @@ import { Route as ProdutosRouteImport } from './routes/produtos'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as TermosRouteImport } from './routes/termos'
+import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
+import { Route as AuthenticatedContaRouteImport } from './routes/_authenticated/conta'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
+import { Route as AuthenticatedContaIndexRouteImport } from './routes/_authenticated/conta.index'
+import { Route as AuthenticatedContaEnderecosRouteImport } from './routes/_authenticated/conta.enderecos'
+import { Route as AuthenticatedPedidoConfirmadoIdRouteImport } from './routes/_authenticated/pedido-confirmado.$id'
+import { Route as AuthenticatedContaPedidosIndexRouteImport } from './routes/_authenticated/conta.pedidos.index'
+import { Route as AuthenticatedContaPedidosIdRouteImport } from './routes/_authenticated/conta.pedidos.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -59,11 +71,50 @@ const TermosRoute = TermosRouteImport.update({
   path: '/termos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedContaRoute = AuthenticatedContaRouteImport.update({
+  id: '/conta',
+  path: '/conta',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ProdutoIdRoute = ProdutoIdRouteImport.update({
   id: '/produto/$id',
   path: '/produto/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedContaIndexRoute = AuthenticatedContaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedContaRoute,
+} as any)
+const AuthenticatedContaEnderecosRoute =
+  AuthenticatedContaEnderecosRouteImport.update({
+    id: '/enderecos',
+    path: '/enderecos',
+    getParentRoute: () => AuthenticatedContaRoute,
+  } as any)
+const AuthenticatedPedidoConfirmadoIdRoute =
+  AuthenticatedPedidoConfirmadoIdRouteImport.update({
+    id: '/pedido-confirmado/$id',
+    path: '/pedido-confirmado/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedContaPedidosIndexRoute =
+  AuthenticatedContaPedidosIndexRouteImport.update({
+    id: '/pedidos/',
+    path: '/pedidos/',
+    getParentRoute: () => AuthenticatedContaRoute,
+  } as any)
+const AuthenticatedContaPedidosIdRoute =
+  AuthenticatedContaPedidosIdRouteImport.update({
+    id: '/pedidos/$id',
+    path: '/pedidos/$id',
+    getParentRoute: () => AuthenticatedContaRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,7 +125,14 @@ export interface FileRoutesByFullPath {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/termos': typeof TermosRoute
+  '/checkout': typeof AuthenticatedCheckoutRoute
+  '/conta': typeof AuthenticatedContaRouteWithChildren
   '/produto/$id': typeof ProdutoIdRoute
+  '/conta/enderecos': typeof AuthenticatedContaEnderecosRoute
+  '/pedido-confirmado/$id': typeof AuthenticatedPedidoConfirmadoIdRoute
+  '/conta/': typeof AuthenticatedContaIndexRoute
+  '/conta/pedidos/$id': typeof AuthenticatedContaPedidosIdRoute
+  '/conta/pedidos/': typeof AuthenticatedContaPedidosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,11 +143,18 @@ export interface FileRoutesByTo {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/termos': typeof TermosRoute
+  '/checkout': typeof AuthenticatedCheckoutRoute
   '/produto/$id': typeof ProdutoIdRoute
+  '/conta/enderecos': typeof AuthenticatedContaEnderecosRoute
+  '/pedido-confirmado/$id': typeof AuthenticatedPedidoConfirmadoIdRoute
+  '/conta': typeof AuthenticatedContaIndexRoute
+  '/conta/pedidos/$id': typeof AuthenticatedContaPedidosIdRoute
+  '/conta/pedidos': typeof AuthenticatedContaPedidosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/carrinho': typeof CarrinhoRoute
   '/privacidade': typeof PrivacidadeRoute
@@ -97,7 +162,14 @@ export interface FileRoutesById {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/termos': typeof TermosRoute
+  '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
+  '/_authenticated/conta': typeof AuthenticatedContaRouteWithChildren
   '/produto/$id': typeof ProdutoIdRoute
+  '/_authenticated/conta/enderecos': typeof AuthenticatedContaEnderecosRoute
+  '/_authenticated/pedido-confirmado/$id': typeof AuthenticatedPedidoConfirmadoIdRoute
+  '/_authenticated/conta/': typeof AuthenticatedContaIndexRoute
+  '/_authenticated/conta/pedidos/$id': typeof AuthenticatedContaPedidosIdRoute
+  '/_authenticated/conta/pedidos/': typeof AuthenticatedContaPedidosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,7 +182,14 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/termos'
+    | '/checkout'
+    | '/conta'
     | '/produto/$id'
+    | '/conta/enderecos'
+    | '/pedido-confirmado/$id'
+    | '/conta/'
+    | '/conta/pedidos/$id'
+    | '/conta/pedidos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,10 +200,17 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/termos'
+    | '/checkout'
     | '/produto/$id'
+    | '/conta/enderecos'
+    | '/pedido-confirmado/$id'
+    | '/conta'
+    | '/conta/pedidos/$id'
+    | '/conta/pedidos'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/auth'
     | '/carrinho'
     | '/privacidade'
@@ -132,11 +218,19 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/termos'
+    | '/_authenticated/checkout'
+    | '/_authenticated/conta'
     | '/produto/$id'
+    | '/_authenticated/conta/enderecos'
+    | '/_authenticated/pedido-confirmado/$id'
+    | '/_authenticated/conta/'
+    | '/_authenticated/conta/pedidos/$id'
+    | '/_authenticated/conta/pedidos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CarrinhoRoute: typeof CarrinhoRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
@@ -154,6 +248,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -205,6 +306,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/checkout': {
+      id: '/_authenticated/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof AuthenticatedCheckoutRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/conta': {
+      id: '/_authenticated/conta'
+      path: '/conta'
+      fullPath: '/conta'
+      preLoaderRoute: typeof AuthenticatedContaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/produto/$id': {
       id: '/produto/$id'
       path: '/produto/$id'
@@ -212,11 +327,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProdutoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/conta/': {
+      id: '/_authenticated/conta/'
+      path: '/'
+      fullPath: '/conta/'
+      preLoaderRoute: typeof AuthenticatedContaIndexRouteImport
+      parentRoute: typeof AuthenticatedContaRoute
+    }
+    '/_authenticated/conta/enderecos': {
+      id: '/_authenticated/conta/enderecos'
+      path: '/enderecos'
+      fullPath: '/conta/enderecos'
+      preLoaderRoute: typeof AuthenticatedContaEnderecosRouteImport
+      parentRoute: typeof AuthenticatedContaRoute
+    }
+    '/_authenticated/pedido-confirmado/$id': {
+      id: '/_authenticated/pedido-confirmado/$id'
+      path: '/pedido-confirmado/$id'
+      fullPath: '/pedido-confirmado/$id'
+      preLoaderRoute: typeof AuthenticatedPedidoConfirmadoIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/conta/pedidos/': {
+      id: '/_authenticated/conta/pedidos/'
+      path: '/pedidos'
+      fullPath: '/conta/pedidos/'
+      preLoaderRoute: typeof AuthenticatedContaPedidosIndexRouteImport
+      parentRoute: typeof AuthenticatedContaRoute
+    }
+    '/_authenticated/conta/pedidos/$id': {
+      id: '/_authenticated/conta/pedidos/$id'
+      path: '/pedidos/$id'
+      fullPath: '/conta/pedidos/$id'
+      preLoaderRoute: typeof AuthenticatedContaPedidosIdRouteImport
+      parentRoute: typeof AuthenticatedContaRoute
+    }
   }
 }
 
+interface AuthenticatedContaRouteChildren {
+  AuthenticatedContaEnderecosRoute: typeof AuthenticatedContaEnderecosRoute
+  AuthenticatedContaIndexRoute: typeof AuthenticatedContaIndexRoute
+  AuthenticatedContaPedidosIdRoute: typeof AuthenticatedContaPedidosIdRoute
+  AuthenticatedContaPedidosIndexRoute: typeof AuthenticatedContaPedidosIndexRoute
+}
+
+const AuthenticatedContaRouteChildren: AuthenticatedContaRouteChildren = {
+  AuthenticatedContaEnderecosRoute: AuthenticatedContaEnderecosRoute,
+  AuthenticatedContaIndexRoute: AuthenticatedContaIndexRoute,
+  AuthenticatedContaPedidosIdRoute: AuthenticatedContaPedidosIdRoute,
+  AuthenticatedContaPedidosIndexRoute: AuthenticatedContaPedidosIndexRoute,
+}
+
+const AuthenticatedContaRouteWithChildren =
+  AuthenticatedContaRoute._addFileChildren(AuthenticatedContaRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
+  AuthenticatedContaRoute: typeof AuthenticatedContaRouteWithChildren
+  AuthenticatedPedidoConfirmadoIdRoute: typeof AuthenticatedPedidoConfirmadoIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
+  AuthenticatedContaRoute: AuthenticatedContaRouteWithChildren,
+  AuthenticatedPedidoConfirmadoIdRoute: AuthenticatedPedidoConfirmadoIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CarrinhoRoute: CarrinhoRoute,
   PrivacidadeRoute: PrivacidadeRoute,
